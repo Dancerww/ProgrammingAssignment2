@@ -4,9 +4,15 @@
 ## Create a matrix object containing a list of four functions,
 ## namely to retrieve and assign the values of the matrix and its
 ## inverse.
+##
+##  set()     to set the value of matrix, and clear cached inverse
+##  get()     to retrieve the value of stored matrix
+##  setinv()  to cache the value of the inverse
+##  getinv()  to retrieve the value of stored inverse
 
 makeCacheMatrix <- function(x = matrix()) {
   inv <- NULL
+  
   set <- function(y) {
     x <<- y
     inv <<- NULL
@@ -14,19 +20,23 @@ makeCacheMatrix <- function(x = matrix()) {
   get <- function() x
   setinv <- function(inverse) inv <<- inverse
   getinv <- function() inv
+  
   list(set = set, get = get,
        setinv = setinv,
        getinv = getinv)
 }
 
 ## Retrieve the inverse of a matrix from cache, or compute and
-## cache one if none exists. Note: the message("getting cached
-## data") for debugging purpose has been removed from the 'if'
-## clause as in the example.
+## cache one if none exists. 
 
 cacheSolve <- function(x, ...) {
   inv <- x$getinv()
-  if(!is.null(inv)) return(inv)
+  
+  if(!is.null(inv)) {
+    message("getting cached data")
+    return(inv)
+  }
+  
   data <- x$get()
   inv <- solve(data, ...)
   x$setinv(inv)
